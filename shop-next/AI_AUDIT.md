@@ -52,3 +52,61 @@
 ### app/layout.js
 - Classification: Server Component
 - Reason: No interactivity.
+
+# AI Usage Log — Week 14, Day 2 (Leads page from Postgres)
+
+## What I used AI for
+
+### Concept explanations
+- Understanding the big shift of Day 2: a Server Component can query
+  Postgres directly (`pool.query`) with no Express API in between —
+  the page component runs on the server and ships finished HTML.
+- What the `@/` import alias means (project root, set up by
+  create-next-app).
+- Why the pool is stored on `globalThis` in `lib/db.js` (Next.js dev
+  hot-reload would otherwise create a new connection pool on every
+  reload and leak connections).
+- Cache behaviour: what `revalidate = 0` and `dynamic = "force-dynamic"`
+  do, why a CRM needs fresh data but a blog/about page benefits from
+  caching, and what ISR is. I wrote my own explanations and AI
+  reviewed them for accuracy.
+- How `searchParams` works: passed to the page as a prop by Next.js,
+  must be awaited in this Next.js version, and enables shareable /
+  bookmarkable filter URLs.
+- Why parameterized queries ($1 + values array) are required for URL
+  input instead of string concatenation (SQL injection).
+- Why `error.js` must be a Client Component while `loading.js` is not
+  (server crashes must be caught in the browser; reset() is an onClick
+  handler).
+- The difference between loading.js (whole-route fallback) and
+  <Suspense> (per-island streaming), and how to split a page into a
+  fast shell + slow async table component.
+
+### Debugging help (AI guided, I ran/fixed everything)
+- "SASL: client password must be a string" → traced with a debug
+  console.log to an env variable naming mismatch: db.js read PG_*
+  variables while .env.local defined DB_* names. Renamed to match.
+  Learned that .env.local is only read at server startup.
+- "column source does not exist" → inspected the real schema with
+  `\d leads` in psql; this database uses `channel` (whatsapp/ussd/web)
+  instead of `source`. Fixed the SELECT and the JSX.
+- "searchParams is not defined" → the prop was not destructured in the
+  page function signature, and casing must be exactly `searchParams`.
+- "Cannot read properties of undefined (reading 'map')" → I had mixed
+  two unpacking styles (`const { rows } = result.rows`). Fixed to
+  `const rows = result.rows`.
+- Suspense refactor review: my first attempt put the test delay inside
+  loading.js (which must render instantly), and my second attempt
+  duplicated the query in both components without rendering
+  <LeadsTable /> inside <Suspense>. AI explained the correct
+  shell/island split and I restructured the file.
+
+## What I did NOT use AI for
+- Deciding Server vs Client classifications — all reasoning in the
+  classification log is my own 
+- Running all commands, SQL checks, and edits myself.
+
+## What I wrote manually
+- The cache behaviour written answers (revalidate = 0, when caching is
+  wanted, ISR) — AI reviewed them afterwards.
+- .env.local values, the classification log entries.
