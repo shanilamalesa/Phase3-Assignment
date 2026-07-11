@@ -51,6 +51,8 @@ connects a Next.js app directly to PostgreSQL — no Express API layer.
   other products ("You might also like").
 
 ## Project structure
+
+```
 shop-next/
 ├── app/
 │   ├── layout.js              # Root layout with nav (Server)
@@ -71,7 +73,7 @@ shop-next/
 ├── lib/
 │   └── db.js                  # pg connection pool
 └── .env.local                 # PG_* credentials (not committed)
-
+```
 ## Running the project
 
 ```bash
