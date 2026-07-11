@@ -9,6 +9,6 @@ const pool = globalForPg.__pgPool ?? new Pool({
   database: process.env.PG_DATABASE,
 });
 if (process.env.NODE_ENV !== "production") globalForPg.__pgPool = pool;
-console.log("DATABASE_URL is:", process.env.DATABASE_URL);
+// console.log("DATABASE_URL is:", process.env.DATABASE_URL);
 
 export default pool;

@@ -110,3 +110,38 @@
 - The cache behaviour written answers (revalidate = 0, when caching is
   wanted, ISR) — AI reviewed them afterwards.
 - .env.local values, the classification log entries.
+
+
+# AI Usage Log — Week 14, Day 3 (Products & Dynamic Routes)
+
+
+## What I used AI for
+
+### Content generation (declared)
+- The 8 skincare seed products (names, descriptions, prices, stock
+  values) and the image URL UPDATE statements. I chose the niche and
+  ran/verified all SQL myself.
+
+### Concept explanations
+- What a "slug" is and why it must be UNIQUE (URL-friendly identifier
+  used for lookup on the dynamic route).
+- What "seeding" and a "niche" mean; why prices are stored as
+  integer cents instead of decimals (floating point money errors).
+- How dynamic routes work: the `[slug]` wildcard folder, one file
+  serving a page per product; `params` vs `searchParams`.
+- Why `notFound()` guards against slugs that match no product.
+- `generateMetadata` (function) vs `metadata` (constant) for
+  database-driven titles, and extending it with OpenGraph tags so
+  shared links render preview cards on WhatsApp/social platforms.
+- `next/image` vs plain `<img>`: automatic resizing, WebP, lazy
+  loading, layout-shift prevention, mandatory width/height, and the
+  remotePatterns allowlist in next.config.mjs.
+- `object-cover` vs `object-contain` for product photos.
+- Why OpenGraph previews cannot be tested from localhost (the
+  platform's servers must be able to reach the URL).
+
+
+## What I did NOT use AI for
+- Choosing the niche and product theme.
+- Running all SQL, git, and file operations myself.
+- Server/Client classification decisions (log below is my reasoning).
