@@ -103,9 +103,45 @@ detail page. Also try /leads?status=new for filtering.
 - PostgreSQL via `pg`
 - Tailwind CSS
 
+*** Live site:** https://phase3-assignment.vercel.app
+### *** ###
+
+## Day 5 — Hosted database & deployment
+
+- **Hosted Postgres (Neon)** — the `products` schema and seed data were
+  loaded into a Neon database (`phase3`), replacing local Postgres in
+  production. Connections use SSL, enabled conditionally in `lib/db.js`
+  so local development continues to work without it.
+- **Deployed on Vercel** — the app is live, built from the `shop-next`
+  root directory with Postgres credentials supplied as environment
+  variables. Product pages are pre-rendered at build time from the
+  hosted database via `generateStaticParams`.
+- **Branch workflow** — feature work happens on a branch, which gets its
+  own Vercel preview deployment. A pull request is opened, the preview
+  is checked, and merging to `main` triggers an automatic production
+  deploy.
+- **Staging environment** — a `staging` branch is aliased to its own
+  preview domain, giving a test environment that mirrors production.
+- **Analytics** — Vercel Web Analytics is enabled via `@vercel/analytics`
+  in the root layout.
+
+### Live URLs
+
+- Production: https://phase3-assignment.vercel.app
+- Staging: https://phase3-assignment-staging.vercel.app
+
+### Deployment notes
+
+See `deployment-notes.md` for reflections on preview deploys, credential
+storage and rotation, and behaviour when the hosted database is
+unavailable.
+
 ## Author
 
 Shanila Malesa — Mctaba Labs Full-Stack Marathon, Phase 3
 
 See `AI_AUDIT.md` for the AI usage log and Server/Client
 classification log.
+
+
+
