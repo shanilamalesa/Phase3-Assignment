@@ -5,7 +5,7 @@
 - [x] Products listing page works
 - [x] Dynamic product detail pages work
 - [x] generateStaticParams pre-renders products
-- [x] Shared shop layout with header and footer
+- [xgit ] Shared shop layout with header and footer
 - [x] Tailwind polish applied
 - [x] Metadata set per page
 - [x] Sitemap generates at /sitemap.xml
