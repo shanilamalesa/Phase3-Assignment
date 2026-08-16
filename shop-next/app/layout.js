@@ -4,7 +4,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Mctaba Shop",
+  title: "MCTABA SHOP",
   description: "Your local online store for quality skincare",
 };
 
