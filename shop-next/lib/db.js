@@ -7,6 +7,7 @@ const pool = globalForPg.__pgPool ?? new Pool({
   user: process.env.PG_USER,
   password: process.env.PG_PASSWORD,
   database: process.env.PG_DATABASE,
+  ssl: process.env.PG_HOST?.includes("neon.tech") ? { rejectUnauthorized: false } : false,
 });
 if (process.env.NODE_ENV !== "production") globalForPg.__pgPool = pool;
 // console.log("DATABASE_URL is:", process.env.DATABASE_URL);
