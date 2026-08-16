@@ -1,19 +1,17 @@
-import Link from "next/link";
-import "./globals.css"
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-export const metadata = { 
-  title: "Shop", 
-  description: "Mctaba Shop" };
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "Mctaba Shop",
+  description: "Your local online store for quality skincare",
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body> 
-        <nav style={{ padding: 16, borderBottom: "1px solid #ddd" }}>
-          <Link href="/">Home</Link> | <Link href="/about">About</Link>
-        </nav>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

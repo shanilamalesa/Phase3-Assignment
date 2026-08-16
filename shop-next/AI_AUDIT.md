@@ -145,3 +145,52 @@
 - Choosing the niche and product theme.
 - Running all SQL, git, and file operations myself.
 - Server/Client classification decisions (log below is my reasoning).
+
+
+
+# AI Usage Log — Week 14, Day 4 (Layouts, Tailwind, SEO)
+
+**Tool used:** Claude (Anthropic)
+
+## What I used AI for
+
+### Concept explanations
+- Route groups: how a folder in parentheses, e.g. `(shop)`, groups
+  routes to share a layout without adding a URL segment, and how
+  layouts nest (root layout → shop layout → page).
+- `generateStaticParams`: it supplies the list of slugs so Next.js can
+  pre-render one HTML page per product at build time; pages are then
+  served without a database query, but are frozen until the next build
+  (which is what ISR/revalidate addresses).
+- Why `next/font` self-hosts Google fonts at build time (speed and
+  privacy — visitors never contact Google's servers).
+- How `sitemap.js` and `robots.js` follow the same file-convention
+  pattern as `loading.js`/`error.js`, but output XML and plain text
+  instead of HTML.
+
+### Code assistance (allowed for Tailwind per the brief)
+- Tailwind classes for the responsive product grid
+  (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`), card hover effects
+  (`transition hover:shadow-lg hover:-translate-y-1`), and container
+  widths. I applied and adjusted them myself.
+
+### Debugging help
+- "Image is not defined" on the products page — I had switched to
+  `<Image>` without adding `import Image from "next/image"`.
+- Root layout cleanup: I had `{children}` rendered twice, a leftover
+  `<nav>` duplicating the new shop header, and inline styles mixed
+  with Tailwind (flagged in the brief's common mistakes).
+- Home page move into `(shop)` required fixing the Counter import
+  path from `./components/Counter` to `../components/Counter`.
+
+### Decisions I made myself
+- Used an env var (`NEXT_PUBLIC_SITE_URL`) for the sitemap base URL
+  instead of hardcoding localhost, per the brief's guidance.
+- Disallowed `/leads` in robots.js because it is internal CRM data,
+  not shop content that should be indexed.
+- Kept `/leads` outside the `(shop)` group so it does not inherit the
+  shop header and footer.
+
+## What I did NOT use AI for
+- Server/Client classification decisions.
+- Running all commands, moves, and tests myself.

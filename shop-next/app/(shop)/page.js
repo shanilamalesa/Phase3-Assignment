@@ -1,8 +1,14 @@
-import Counter from "./components/Counter";
+import Counter from "../components/Counter";
 
 
 export const metadata = {
-  title: "Home | Shop"
+  title: "Mctaba Shop",
+  description: "Your local online store for quality skincare",
+  openGraph: {
+    title: "Mctaba Shop",
+    description: "Your local online store for quality skincare",
+    type: "website",
+  }
 }
 
 export default async function HomePage() {

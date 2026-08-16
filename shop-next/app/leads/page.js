@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 // ── The slow island: query + table ONLY ──
 async function LeadsTable({ status }) {
-  await new Promise((r) => setTimeout(r, 2000)); // TEMP: remove after testing
+  // await new Promise((r) => setTimeout(r, 2000)); // TEMP: remove after testing
 
   let result;
   if (status) {
