@@ -1,5 +1,7 @@
 # Mctaba Shop — Next.js (Week 14)
 
+**Live site:** https://phase3-assignment.vercel.app
+
 Phase 3 of the Mctaba Labs Full-Stack Marathon. This week switches
 from Vite + React to **Next.js with the App Router**. The project
 connects a Next.js app directly to PostgreSQL — no Express API layer.
@@ -34,9 +36,8 @@ connects a Next.js app directly to PostgreSQL — no Express API layer.
 
 ## Day 3 — Products catalogue & dynamic routes
 
-- **Products table & seed** — `products` in `phase_db` with UUID ids,
-  unique slugs, integer `price_cents`, stock counts (8 skincare
-  products).
+- **Products table & seed** — `products` with UUID ids, unique slugs,
+  integer `price_cents`, stock counts (8 skincare products).
 - **Listing page** — `/products` renders a responsive Tailwind grid,
   each card linking to its detail page via `<Link>`.
 - **Dynamic product pages** — `products/[slug]/page.js` serves a page
@@ -63,9 +64,8 @@ connects a Next.js app directly to PostgreSQL — no Express API layer.
 - **Per-page metadata** — home, products list and each product page
   export their own title, description and OpenGraph tags.
 - **Sitemap** — `app/sitemap.js` generates `/sitemap.xml` from the
-  database, listing every product URL with `created_at` as
-  `lastModified`. The base URL comes from `NEXT_PUBLIC_SITE_URL`
-  rather than being hardcoded.
+  database. The base URL comes from `NEXT_PUBLIC_SITE_URL` rather
+  than being hardcoded.
 - **Robots (stretch)** — `app/robots.js` allows crawling of the shop,
   disallows `/leads`, and points crawlers to the sitemap.
 - **Self-hosted font (stretch)** — `next/font` bundles the Google font
@@ -73,33 +73,63 @@ connects a Next.js app directly to PostgreSQL — no Express API layer.
 - **Dark mode (stretch)** — Tailwind `dark:` variants across the
   layout, cards and detail pages, following the system colour scheme.
 
+## Day 5 — Hosted database & deployment
+
+- **Hosted Postgres (Neon)** — the `products` schema and seed data were
+  loaded into a Neon database (`phase3`), replacing local Postgres in
+  production. Connections use SSL, enabled conditionally in `lib/db.js`
+  so local development continues to work without it.
+- **Deployed on Vercel** — built from the `shop-next` root directory
+  with Postgres credentials supplied as environment variables. Product
+  pages are pre-rendered at build time from the hosted database.
+- **Branch workflow** — feature work happens on a branch, which gets its
+  own Vercel preview deployment. A pull request is opened, the preview
+  is checked, and merging to `main` triggers an automatic production
+  deploy.
+- **Staging environment** — a `staging` branch is aliased to its own
+  preview domain, mirroring production.
+- **Analytics** — Vercel Web Analytics via `@vercel/analytics` in the
+  root layout.
+
+### Live URLs
+
+- Production: https://phase3-assignment.vercel.app
+- Staging: https://phase3-assignment-staging.vercel.app
+
 ## Project structure
 
 ```
-shop-next/
-├── app/
-│   ├── layout.js              # Root layout: html, global CSS, font
-│   ├── loading.js             # Loading state for home route
-│   ├── sitemap.js             # Generates /sitemap.xml from the DB
-│   ├── robots.js              # Generates /robots.txt
-│   ├── components/
-│   │   └── Counter.jsx        # Interactive counter (Client)
-│   ├── leads/
-│   │   ├── page.js            # /leads — queries Postgres (Server)
-│   │   ├── loading.js         # Loading state for leads route
-│   │   └── error.js           # Error boundary (Client)
-│   └── (shop)/                # Route group — no URL segment
-│       ├── layout.js          # Shared header + footer
-│       ├── page.js            # Home "/"
-│       ├── about/
-│       │   └── page.js        # /about
-│       └── products/
-│           ├── page.js        # /products grid
-│           └── [slug]/
-│               └── page.js    # Dynamic product page
-├── lib/
-│   └── db.js                  # pg connection pool
-└── .env.local                 # Credentials (not committed)
+PHASE3-ASSIGNMENT/
+├── README.md
+├── deployment-notes.md         # Day 5 reflection questions
+└── shop-next/
+    ├── AI_AUDIT.md             # AI usage + Server/Client log
+    ├── CHECKLIST.md            # Day 4 pre-weekend checklist
+    ├── cache-notes.md          # Day 2 caching answers
+    ├── db/
+    │   ├── schema.sql
+    │   └── seed.sql
+    ├── app/
+    │   ├── layout.js           # Root layout: html, global CSS, font
+    │   ├── loading.js
+    │   ├── sitemap.js          # Generates /sitemap.xml from the DB
+    │   ├── robots.js           # Generates /robots.txt
+    │   ├── components/
+    │   │   └── Counter.jsx     # Interactive counter (Client)
+    │   ├── leads/
+    │   │   ├── page.js         # /leads — queries Postgres (Server)
+    │   │   ├── loading.js
+    │   │   └── error.js        # Error boundary (Client)
+    │   └── (shop)/             # Route group — no URL segment
+    │       ├── layout.js       # Shared header + footer
+    │       ├── page.js         # Home "/"
+    │       ├── about/page.js
+    │       └── products/
+    │           ├── page.js
+    │           └── [slug]/page.js
+    ├── lib/
+    │   └── db.js               # pg connection pool
+    └── .env.local              # Credentials (not committed)
 ```
 
 ## Running the project
@@ -120,26 +150,29 @@ PG_DATABASE=your_database
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
+In production these same variables are set in Vercel, pointing at the
+hosted Neon database.
+
 Then:
 
 ```bash
 npm run dev
 ```
 
-Open http://localhost:3000/products — click any product for its
-detail page. Also try `/leads?status=new`, `/sitemap.xml` and
-`/robots.txt`.
+Open http://localhost:3000/products — click any product for its detail
+page. Also try `/leads?status=new`, `/sitemap.xml` and `/robots.txt`.
 
 ## Tech stack
 
 - Next.js (App Router)
 - React (Server + Client Components, Suspense)
-- PostgreSQL via `pg`
+- PostgreSQL via `pg`, hosted on Neon
 - Tailwind CSS
+- Deployed on Vercel
 
 ## Author
 
 Shanila Malesa — Mctaba Labs Full-Stack Marathon, Phase 3
 
-See `AI_AUDIT.md` for the AI usage log and Server/Client
-classification log.
+See `AI_AUDIT.md` for the AI usage log and Server/Client classification
+log, and `deployment-notes.md` for deployment reflections.
